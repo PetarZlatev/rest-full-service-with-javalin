@@ -4,6 +4,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import java.util.Optional;
+import java.util.UUID;
+
 public class AccountRepository {
     private final SessionFactory sessionFactory;
 
@@ -26,5 +29,10 @@ public class AccountRepository {
             e.printStackTrace();
         }
         throw new RuntimeException();
+    }
+
+    public Optional<Account> findById(UUID id) {
+        Session session = sessionFactory.openSession();
+        return Optional.ofNullable(session.find(Account.class, id));
     }
 }
