@@ -25,6 +25,7 @@
 
         <!-- Mapping With Model Class Containing Annotations -->
         <mapping class="com.revolut.moneytransfer.domain.Account"/>
+        <mapping class="com.revolut.moneytransfer.domain.MoneyTransfer"/>
     </session-factory>
 </hibernate-configuration>
 

@@ -1,29 +1,15 @@
-package com.revolut.moneytransfer.domain;
+package com.revolut.moneytransfer.rest;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Version;
 import java.util.UUID;
 
-@Entity
-public class Account {
+public class AccountResponse {
 
-    @Id
-    @GeneratedValue
     private UUID id;
-
-    @Version
-    private int version;
-
     private String holder;
-
     private int balance;
 
-    public Account() {
-    }
-
-    public Account(String holder, int balance) {
+    public AccountResponse(UUID id, String holder, int balance) {
+        this.id = id;
         this.holder = holder;
         this.balance = balance;
     }
@@ -40,7 +26,11 @@ public class Account {
         return holder;
     }
 
-    public Integer getBalance() {
+    public void setHolder(String holder) {
+        this.holder = holder;
+    }
+
+    public int getBalance() {
         return balance;
     }
 
@@ -48,5 +38,3 @@ public class Account {
         this.balance = balance;
     }
 }
-
-
