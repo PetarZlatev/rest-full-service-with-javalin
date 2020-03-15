@@ -1,6 +1,7 @@
 package com.revolut.moneytransfer;
 
 import com.revolut.moneytransfer.domain.exception.BankAccountNotFoundException;
+import com.revolut.moneytransfer.domain.exception.InsufficientBalanceException;
 import com.revolut.moneytransfer.rest.AccountController;
 import com.revolut.moneytransfer.rest.ErrorResponse;
 import com.revolut.moneytransfer.rest.MoneyTransferController;
@@ -57,15 +58,13 @@ public class App {
         }));
 
         // Error Mapping
-
         app.exception(BankAccountNotFoundException.class, (e, ctx) -> {
             ctx.status(404);
             ctx.json(new ErrorResponse(e.getMessage(), 404));
         });
-
-        app.exception(BankAccountNotFoundException.class, (e, ctx) -> {
-            ctx.status(404);
-            ctx.json(new ErrorResponse(e.getMessage(), 404));
+        app.exception(InsufficientBalanceException.class, (e, ctx) -> {
+            ctx.status(400);
+            ctx.json(new ErrorResponse(e.getMessage(), 400));
         });
 
         app.exception(PersistenceConflictException.class, (e, ctx) -> ctx.status(409));
