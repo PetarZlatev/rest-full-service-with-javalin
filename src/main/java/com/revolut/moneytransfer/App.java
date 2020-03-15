@@ -1,9 +1,9 @@
 package com.revolut.moneytransfer;
 
 import com.revolut.moneytransfer.rest.AccountController;
-import com.revolut.moneytransfer.rest.CreateAccountRequest;
-import com.revolut.moneytransfer.rest.CreateMoneyTransferRequest;
 import com.revolut.moneytransfer.rest.MoneyTransferController;
+import com.revolut.moneytransfer.rest.dto.CreateAccountRequest;
+import com.revolut.moneytransfer.rest.dto.CreateMoneyTransferRequest;
 import io.javalin.Javalin;
 
 import java.util.UUID;

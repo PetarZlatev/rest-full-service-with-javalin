@@ -2,6 +2,8 @@ package com.revolut.moneytransfer.rest;
 
 import com.revolut.moneytransfer.MoneyTransferService;
 import com.revolut.moneytransfer.domain.MoneyTransfer;
+import com.revolut.moneytransfer.rest.dto.CreateMoneyTransferRequest;
+import com.revolut.moneytransfer.rest.dto.MoneyTransferResponse;
 
 
 public class MoneyTransferController {

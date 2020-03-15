@@ -1,4 +1,4 @@
-package com.revolut.moneytransfer.rest;
+package com.revolut.moneytransfer.rest.dto;
 
 import java.util.UUID;
 

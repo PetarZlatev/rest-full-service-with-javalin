@@ -3,6 +3,8 @@ package com.revolut.moneytransfer.rest;
 import com.revolut.moneytransfer.domain.Account;
 import com.revolut.moneytransfer.domain.AccountRepository;
 import com.revolut.moneytransfer.domain.exception.AccountNotFoundException;
+import com.revolut.moneytransfer.rest.dto.AccountResponse;
+import com.revolut.moneytransfer.rest.dto.CreateAccountRequest;
 
 import java.util.Optional;
 import java.util.UUID;

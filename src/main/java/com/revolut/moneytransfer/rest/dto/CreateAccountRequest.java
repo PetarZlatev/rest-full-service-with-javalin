@@ -1,4 +1,4 @@
-package com.revolut.moneytransfer.rest;
+package com.revolut.moneytransfer.rest.dto;
 
 public class CreateAccountRequest {
     private String holder;
