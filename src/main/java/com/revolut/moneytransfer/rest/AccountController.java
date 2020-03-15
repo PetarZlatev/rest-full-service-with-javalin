@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public class AccountController {
 
-    private AccountRepository repository;
+    private final AccountRepository repository;
 
     public AccountController(AccountRepository repository) {
         this.repository = repository;

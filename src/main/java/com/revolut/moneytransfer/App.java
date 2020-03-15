@@ -2,8 +2,9 @@ package com.revolut.moneytransfer;
 
 import com.revolut.moneytransfer.rest.AccountController;
 import com.revolut.moneytransfer.rest.CreateAccountRequest;
+import com.revolut.moneytransfer.rest.CreateMoneyTransferRequest;
+import com.revolut.moneytransfer.rest.MoneyTransferController;
 import io.javalin.Javalin;
-import io.javalin.core.validation.Validator;
 
 import java.util.UUID;
 
@@ -13,20 +14,33 @@ import static io.javalin.apibuilder.ApiBuilder.post;
 
 public class App {
 
-    private Javalin app;
+    private final Javalin app;
 
-    public App(AccountController accountController) {
+    public App(AccountController accountController, MoneyTransferController transferController) {
         app = Javalin.create();
-
 
         app.routes(() -> path("accounts", () -> {
             post(ctx -> {
-                Validator<CreateAccountRequest> validator = ctx.bodyValidator(CreateAccountRequest.class)
+                CreateAccountRequest createAccountRequest = ctx.bodyValidator(CreateAccountRequest.class)
                         .check(obj -> !obj.getHolder().isEmpty())
-                        .check(obj -> obj.getInitialBalance() > 0);
+                        .check(obj -> obj.getInitialBalance() > 0)
+                        .get();
+                ctx.json(accountController.createAccount(createAccountRequest));
+                ctx.status(201);
+            });
+            path("/:id", () -> get(ctx -> {
+                String id = ctx.pathParam("id");
+                ctx.json(accountController.findById(UUID.fromString(id)));
+                ctx.status(200);
+            }));
+        }));
 
-                CreateAccountRequest request = validator.get();
-                ctx.json(accountController.createAccount(request));
+        app.routes(() -> path("transfers", () -> {
+            post(ctx -> {
+                CreateMoneyTransferRequest createTransferRequest = ctx.bodyValidator(CreateMoneyTransferRequest.class)
+                        .check(obj -> obj.getAmount() > 0)
+                        .get();
+                ctx.json(transferController.transferMoney(createTransferRequest));
                 ctx.status(201);
             });
             path("/:id", () -> get(ctx -> {

@@ -7,6 +7,6 @@ import static java.lang.String.format;
 public class AccountNotFoundException extends RuntimeException {
 
     public AccountNotFoundException(UUID accountId) {
-        super(format("There is no payer account with the id:'%s'", accountId.toString()));
+        super(format("There is no account with the id:'%s'", accountId.toString()));
     }
 }

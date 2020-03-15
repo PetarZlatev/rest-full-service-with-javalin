@@ -26,7 +26,7 @@ class MoneyTransferServiceTest {
     void setUpBefore() {
         sessionFactory = HibernateUtil.getSessionFactory();
         accountRepository = new AccountRepository(sessionFactory);
-        tested = new MoneyTransferService(accountRepository);
+        tested = new MoneyTransferService();
     }
 
     @AfterEach

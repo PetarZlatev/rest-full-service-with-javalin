@@ -1,7 +1,6 @@
 package com.revolut.moneytransfer;
 
 import com.revolut.moneytransfer.domain.Account;
-import com.revolut.moneytransfer.domain.AccountRepository;
 import com.revolut.moneytransfer.domain.MoneyTransfer;
 import com.revolut.moneytransfer.domain.exception.AccountNotFoundException;
 import com.revolut.moneytransfer.domain.exception.InsufficientBalanceException;
@@ -15,15 +14,12 @@ import java.util.Optional;
 
 public class MoneyTransferService {
 
-    private AccountRepository accountRepository;
-    private SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+    private final SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
-
-    public MoneyTransferService(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
+    public MoneyTransferService() {
     }
 
-    public void transferMoney(MoneyTransfer transfer) {
+    public MoneyTransfer transferMoney(final MoneyTransfer transfer) {
 
         if (transfer.getAmount() < 1) {
             throw new TransferAmountShouldBePositive();
@@ -32,13 +28,13 @@ public class MoneyTransferService {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
-        Optional<Account> optionalOfPayer = accountRepository.findById(transfer.getPayerAccountId());
+        Optional<Account> optionalOfPayer = Optional.ofNullable(session.find(Account.class, transfer.getPayerAccountId()));
         if (optionalOfPayer.isEmpty()) {
             transaction.rollback();
             throw new AccountNotFoundException(transfer.getPayerAccountId());
         }
 
-        Optional<Account> optionalOfBeneficiary = accountRepository.findById(transfer.getBeneficiaryAccountId());
+        Optional<Account> optionalOfBeneficiary = Optional.ofNullable(session.find(Account.class, transfer.getBeneficiaryAccountId()));
         if (optionalOfBeneficiary.isEmpty()) {
             transaction.rollback();
             throw new AccountNotFoundException(transfer.getBeneficiaryAccountId());
@@ -60,6 +56,7 @@ public class MoneyTransferService {
             session.merge(beneficiaryAccount);
             session.save(transfer);
             session.getTransaction().commit();
+            return transfer;
         } catch (OptimisticLockException e) {
             transaction.rollback();
             e.printStackTrace();
