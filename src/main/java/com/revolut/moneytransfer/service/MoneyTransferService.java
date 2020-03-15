@@ -1,8 +1,9 @@
-package com.revolut.moneytransfer;
+package com.revolut.moneytransfer.service;
 
+import com.revolut.moneytransfer.HibernateUtil;
 import com.revolut.moneytransfer.domain.Account;
 import com.revolut.moneytransfer.domain.MoneyTransfer;
-import com.revolut.moneytransfer.domain.exception.AccountNotFoundException;
+import com.revolut.moneytransfer.domain.exception.BankAccountNotFoundException;
 import com.revolut.moneytransfer.domain.exception.InsufficientBalanceException;
 import com.revolut.moneytransfer.domain.exception.TransferAmountShouldBePositive;
 import org.hibernate.Session;
@@ -30,20 +31,17 @@ public class MoneyTransferService {
 
         Optional<Account> optionalOfPayer = Optional.ofNullable(session.find(Account.class, transfer.getPayerAccountId()));
         if (optionalOfPayer.isEmpty()) {
-            transaction.rollback();
-            throw new AccountNotFoundException(transfer.getPayerAccountId());
+            throw new BankAccountNotFoundException(transfer.getPayerAccountId());
         }
 
         Optional<Account> optionalOfBeneficiary = Optional.ofNullable(session.find(Account.class, transfer.getBeneficiaryAccountId()));
         if (optionalOfBeneficiary.isEmpty()) {
-            transaction.rollback();
-            throw new AccountNotFoundException(transfer.getBeneficiaryAccountId());
+            throw new BankAccountNotFoundException(transfer.getBeneficiaryAccountId());
         }
 
         Account payerAccount = optionalOfPayer.get();
 
         if (payerAccount.getBalance() < transfer.getAmount()) {
-            transaction.rollback();
             throw new InsufficientBalanceException("Insufficient balance exception");
         }
 
@@ -60,7 +58,7 @@ public class MoneyTransferService {
         } catch (OptimisticLockException e) {
             transaction.rollback();
             e.printStackTrace();
-            throw new RuntimeException();
+            throw new PersistenceConflictException();
         }
 
     }

@@ -4,7 +4,7 @@ This is a Javalin example project which implements RESTful API for money transfe
 
 
 ##  Installation Prerequisites
-  - JAVA 11 
+  - Java 11 
   - maven
   
 ##  Usage 
@@ -51,7 +51,7 @@ curl --request POST \
 
 ### Technologies used:
 
-* [JAVA](https://www.java.com/)
+* [Java](https://www.java.com/)
 * [Javalin](https://javalin.io/) as REST server
 * [H2](https://www.h2database.com/html/main.html) in memory DB
 * [JUnit5](https://junit.org/junit5/), and  [Unirest](http://kong.github.io/unirest-java) for testing
@@ -64,6 +64,9 @@ curl --request POST \
 * there is in-memory database used - no persistence after shut down
 
   
-  
-  
+## Contributions  
+
+I don't believe, but hey, if anybody wants.
+Please you are welcome.
+ 
   

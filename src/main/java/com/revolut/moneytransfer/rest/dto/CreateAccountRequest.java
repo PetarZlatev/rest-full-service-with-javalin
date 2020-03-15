@@ -2,7 +2,7 @@ package com.revolut.moneytransfer.rest.dto;
 
 public class CreateAccountRequest {
     private String holder;
-    private int initialBalance = 10;
+    private int initialBalance;
 
     public String getHolder() {
         return holder;

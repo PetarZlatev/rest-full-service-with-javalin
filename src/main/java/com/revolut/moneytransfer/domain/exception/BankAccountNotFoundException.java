@@ -4,9 +4,9 @@ import java.util.UUID;
 
 import static java.lang.String.format;
 
-public class AccountNotFoundException extends RuntimeException {
+public class BankAccountNotFoundException extends RuntimeException {
 
-    public AccountNotFoundException(UUID accountId) {
+    public BankAccountNotFoundException(UUID accountId) {
         super(format("There is no account with the id:'%s'", accountId.toString()));
     }
 }

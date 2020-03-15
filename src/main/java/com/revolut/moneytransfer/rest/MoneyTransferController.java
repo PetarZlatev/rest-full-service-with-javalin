@@ -1,9 +1,9 @@
 package com.revolut.moneytransfer.rest;
 
-import com.revolut.moneytransfer.MoneyTransferService;
 import com.revolut.moneytransfer.domain.MoneyTransfer;
 import com.revolut.moneytransfer.rest.dto.CreateMoneyTransferRequest;
 import com.revolut.moneytransfer.rest.dto.MoneyTransferResponse;
+import com.revolut.moneytransfer.service.MoneyTransferService;
 
 
 public class MoneyTransferController {
@@ -16,7 +16,16 @@ public class MoneyTransferController {
     }
 
     public MoneyTransferResponse transferMoney(CreateMoneyTransferRequest request) {
-        MoneyTransfer transfer = transferService.transferMoney(new MoneyTransfer(request.getPayerAccountId(), request.getBeneficiaryAccountId(), request.getAmount()));
-        return new MoneyTransferResponse(transfer.getId(), transfer.getPayerAccountId(), transfer.getBeneficiaryAccountId(), transfer.getAmount());
+
+        MoneyTransfer transfer = transferService.transferMoney(
+                new MoneyTransfer(request.getPayerAccountId(),
+                        request.getBeneficiaryAccountId(),
+                        request.getAmount()));
+
+        return new MoneyTransferResponse(
+                transfer.getId(),
+                transfer.getPayerAccountId(),
+                transfer.getBeneficiaryAccountId(),
+                transfer.getAmount());
     }
 }

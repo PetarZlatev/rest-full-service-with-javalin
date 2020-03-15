@@ -1,11 +1,11 @@
 import com.revolut.moneytransfer.App;
 import com.revolut.moneytransfer.HibernateUtil;
-import com.revolut.moneytransfer.MoneyTransferService;
 import com.revolut.moneytransfer.domain.AccountRepository;
 import com.revolut.moneytransfer.rest.AccountController;
 import com.revolut.moneytransfer.rest.MoneyTransferController;
 import com.revolut.moneytransfer.rest.dto.AccountResponse;
 import com.revolut.moneytransfer.rest.dto.CreateAccountRequest;
+import com.revolut.moneytransfer.service.MoneyTransferService;
 import kong.unirest.HttpResponse;
 import kong.unirest.json.JSONObject;
 import org.hibernate.SessionFactory;
@@ -69,14 +69,29 @@ public class FunctionalTestAccountRestEndpoint {
         assertThat(obj.getString("balance")).isEqualTo("10");
     }
 
+
     @Test
-    public void GET_accounts() {
+    public void GET_accounts_unknown_returns_404() {
+
+        HttpResponse<String> response = get("http://localhost:1234/accounts/{transferId}")
+                .routeParam("transferId", "7c8e239e-a79a-4b70-916a-4e28e41e997e")
+                .asString();
+        assertThat(response.getStatus()).isEqualTo(404);
+        String body = response.getBody();
+        JSONObject obj = new JSONObject(body);
+        assertThat(obj.getString("title")).isNotEmpty();
+
+    }
+
+    @Test
+    public void GET_accounts_id() {
         CreateAccountRequest accountRequest = new CreateAccountRequest();
         accountRequest.setHolder("Max");
         accountRequest.setInitialBalance(11);
         AccountResponse account = accountController.createAccount(accountRequest);
 
-        HttpResponse<String> response = get("http://localhost:1234/accounts/" + account.getId())
+        HttpResponse<String> response = get("http://localhost:1234/accounts/{accountId}")
+                .routeParam("accountId", account.getId().toString())
                 .asString();
         assertThat(response.getStatus()).isEqualTo(200);
         String body = response.getBody();

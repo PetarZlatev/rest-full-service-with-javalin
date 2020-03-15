@@ -1,12 +1,12 @@
 import com.revolut.moneytransfer.App;
 import com.revolut.moneytransfer.HibernateUtil;
-import com.revolut.moneytransfer.MoneyTransferService;
 import com.revolut.moneytransfer.domain.Account;
 import com.revolut.moneytransfer.domain.AccountRepository;
 import com.revolut.moneytransfer.rest.AccountController;
 import com.revolut.moneytransfer.rest.MoneyTransferController;
 import com.revolut.moneytransfer.rest.dto.AccountResponse;
 import com.revolut.moneytransfer.rest.dto.CreateAccountRequest;
+import com.revolut.moneytransfer.service.MoneyTransferService;
 import kong.unirest.HttpResponse;
 import kong.unirest.json.JSONObject;
 import org.hibernate.SessionFactory;
@@ -68,9 +68,9 @@ public class FunctionalTestTransferRestEndpoint {
                 .body(sb)
                 .asString();
 
+        JSONObject obj = new JSONObject(response.getBody());
+
         assertThat(response.getStatus()).isEqualTo(201);
-        String body = response.getBody();
-        JSONObject obj = new JSONObject(body);
         assertThat(obj.getString("id")).isNotEmpty();
         assertThat(obj.getString("payerAccountId")).isEqualTo(payer.getId().toString());
         assertThat(obj.getString("beneficiaryAccountId")).isEqualTo(beneficiary.getId().toString());
@@ -86,15 +86,19 @@ public class FunctionalTestTransferRestEndpoint {
         accountRequest.setInitialBalance(11);
         AccountResponse account = accountController.createAccount(accountRequest);
 
-        HttpResponse<String> response = get("http://localhost:1234/accounts/" + account.getId())
+        HttpResponse<String> response = get("http://localhost:1234/accounts/{accountId}")
+                .routeParam("accountId", account.getId().toString())
                 .asString();
+
+        JSONObject obj = new JSONObject(response.getBody());
+
         assertThat(response.getStatus()).isEqualTo(200);
-        String body = response.getBody();
-        JSONObject obj = new JSONObject(body);
         assertThat(obj.getString("id")).isEqualTo(account.getId().toString());
         assertThat(obj.getString("holder")).isEqualTo("Max");
         assertThat(obj.getString("balance")).isEqualTo("11");
     }
+
+
 
 
 }

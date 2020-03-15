@@ -3,9 +3,10 @@ package com.revolut.moneytransfer;
 import com.revolut.moneytransfer.domain.Account;
 import com.revolut.moneytransfer.domain.AccountRepository;
 import com.revolut.moneytransfer.domain.MoneyTransfer;
-import com.revolut.moneytransfer.domain.exception.AccountNotFoundException;
+import com.revolut.moneytransfer.domain.exception.BankAccountNotFoundException;
 import com.revolut.moneytransfer.domain.exception.InsufficientBalanceException;
 import com.revolut.moneytransfer.domain.exception.TransferAmountShouldBePositive;
+import com.revolut.moneytransfer.service.MoneyTransferService;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -51,7 +52,7 @@ class MoneyTransferServiceTest {
         UUID payerUUID = UUID.fromString("2a0c736c-6220-43fa-b49e-eec65736d491");
         UUID beneficiaryUUID = UUID.fromString("916237b6-6329-11ea-bc55-0242ac130003");
         MoneyTransfer transferInitialization = new MoneyTransfer(payerUUID, beneficiaryUUID, 10);
-        assertThrows(AccountNotFoundException.class, () -> tested.transferMoney(transferInitialization));
+        assertThrows(BankAccountNotFoundException.class, () -> tested.transferMoney(transferInitialization));
     }
 
     @Test
@@ -62,7 +63,7 @@ class MoneyTransferServiceTest {
         UUID unknownBeneficiaryId = UUID.fromString("916237b6-6329-11ea-bc55-0242ac130003");
         MoneyTransfer transferInitialization = new MoneyTransfer(payerUUID, unknownBeneficiaryId, 10);
 
-        assertThrows(AccountNotFoundException.class, () -> tested.transferMoney(transferInitialization));
+        assertThrows(BankAccountNotFoundException.class, () -> tested.transferMoney(transferInitialization));
     }
 
     @Test

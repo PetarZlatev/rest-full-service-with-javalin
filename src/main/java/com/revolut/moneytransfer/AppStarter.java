@@ -3,6 +3,7 @@ package com.revolut.moneytransfer;
 import com.revolut.moneytransfer.domain.AccountRepository;
 import com.revolut.moneytransfer.rest.AccountController;
 import com.revolut.moneytransfer.rest.MoneyTransferController;
+import com.revolut.moneytransfer.service.MoneyTransferService;
 
 public class AppStarter {
 

@@ -2,7 +2,6 @@ package com.revolut.moneytransfer.domain;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -14,21 +13,15 @@ public class AccountRepository {
         this.sessionFactory = sessionFactory;
     }
 
-    public Account createAccount(Account newAccount) {
+    public Account createAccount(final Account newAccount) {
 
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            session.save(newAccount);
-            transaction.commit();
-            return newAccount;
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-        throw new RuntimeException();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.save(newAccount);
+        session.getTransaction().commit();
+        session.close();
+
+        return newAccount;
     }
 
     public Optional<Account> findById(UUID id) {

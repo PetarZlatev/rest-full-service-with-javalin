@@ -2,7 +2,7 @@ package com.revolut.moneytransfer.rest;
 
 import com.revolut.moneytransfer.domain.Account;
 import com.revolut.moneytransfer.domain.AccountRepository;
-import com.revolut.moneytransfer.domain.exception.AccountNotFoundException;
+import com.revolut.moneytransfer.domain.exception.BankAccountNotFoundException;
 import com.revolut.moneytransfer.rest.dto.AccountResponse;
 import com.revolut.moneytransfer.rest.dto.CreateAccountRequest;
 
@@ -18,18 +18,26 @@ public class AccountController {
     }
 
     public AccountResponse createAccount(CreateAccountRequest request) {
-        Account account = repository.createAccount(new Account(request.getHolder(), request.getInitialBalance()));
-        return new AccountResponse(account.getId(), account.getHolder(), account.getBalance());
+        Account account = repository.createAccount(new Account(
+                request.getHolder(),
+                request.getInitialBalance()));
+        return new AccountResponse(
+                account.getId(),
+                account.getHolder(),
+                account.getBalance());
     }
 
     public AccountResponse findById(UUID id) {
 
         Optional<Account> optionalOfAccount = repository.findById(id);
         if (optionalOfAccount.isEmpty()) {
-            throw new AccountNotFoundException(id);
+            throw new BankAccountNotFoundException(id);
         }
         Account account = optionalOfAccount.get();
-        return new AccountResponse(account.getId(), account.getHolder(), account.getBalance());
+        return new AccountResponse(
+                account.getId(),
+                account.getHolder(),
+                account.getBalance());
 
     }
 }
